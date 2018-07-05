@@ -17,6 +17,7 @@ function bangPaiRenWu()
 	while true do
 		bpjm = checkInterface(interfaceDatas)
 		sleep(50)
+		ziDongZhanDou()
 		if bpjm == "对话" then
 			Dialog(1)
 		end
@@ -33,6 +34,7 @@ function bangPaiRenWu()
 		
 		if bpjm == "商店" then
 			tap(645, 427)
+			sleep(500)
 		end
 		
 		if bpjm == "提交宠物" then

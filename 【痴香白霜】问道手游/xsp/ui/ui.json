@@ -8,7 +8,7 @@
    "okname" : "确定",
    "views" : [
       {
-         "text" : "【设置】",
+         "text" : "【快捷设置】",
          "type" : "Page",
          "views" : [
             {
@@ -31,14 +31,14 @@
                "align" : "center",
                "color" : "0,0,0",
                "size" : "30",
-               "text" : "【快捷设置】",
+               "text" : "【快捷设置】(请勾选自定义!)",
                "bg" : "255,255,255",
                "type" : "Label"
             },
             {
                "id" : "快捷选择",
                "list" : "痴香白霜0o0,天涯の小仙,天涯の小晓,自定义",
-               "select" : "0",
+               "select" : "3",
                "size" : "15",
                "type" : "RadioGroup",
                "orientation" : "horizontal",
@@ -54,30 +54,19 @@
             },
             {
                "id" : "模式选择",
-               "list" : "混队刷道到指定时间开始日常任务,直接开始日常任务,春节-年货商人,武学历练",
+               "list" : "混队刷道到指定时间开始日常任务,直接开始日常任务,武学历练",
                "select" : "0",
                "size" : "15",
                "type" : "RadioGroup",
                "orientation" : "horizontal",
                "color" : "0,0,0"
-            },
-            {
-               "align" : "center",
-               "color" : "0,0,0",
-               "size" : "30",
-               "text" : "【游戏版本】",
-               "bg" : "255,255,255",
-               "type" : "Label"
-            },
-            {
-               "id" : "区组选择",
-               "list" : "公测区,内测区",
-               "select" : "0",
-               "size" : "15",
-               "type" : "RadioGroup",
-               "orientation" : "horizontal",
-               "color" : "0,0,0"
-            },
+            }
+         ]
+      },
+      {
+         "text" : "【日常选择】",
+         "type" : "Page",
+         "views" : [
             {
                "align" : "center",
                "color" : "0,0,0",
@@ -99,6 +88,89 @@
                "align" : "center",
                "color" : "0,0,0",
                "size" : "30",
+               "text" : "【自动战斗技能选择】",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "20",
+               "text" : "【日常技能选择】",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "id" : "日常技能类型",
+               "list" : "辅助技能,障碍技能,法术技能,其他",
+               "select" : "2",
+               "size" : "15",
+               "type" : "RadioGroup",
+               "orientation" : "horizontal",
+               "color" : "0,60,120"
+            },
+						{
+               "id" : "日常技能阶数",
+               "list" : "一阶(普攻),二阶(防御),三阶(力破千钧),四阶(组合技能),五阶",
+               "select" : "2",
+               "size" : "15",
+               "type" : "RadioGroup",
+               "orientation" : "horizontal",
+               "color" : "50,200,0"
+            },
+						{
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "20",
+               "text" : "【刷道技能选择】",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "id" : "刷道技能类型",
+               "list" : "辅助技能,障碍技能,法术技能,其他",
+               "select" : "2",
+               "size" : "15",
+               "type" : "RadioGroup",
+               "orientation" : "horizontal",
+               "color" : "0,60,120"
+            },
+						{
+               "id" : "刷道技能阶数",
+               "list" : "一阶(普攻),二阶(防御),三阶(力破千钧),四阶(组合技能),五阶",
+               "select" : "2",
+               "size" : "15",
+               "type" : "RadioGroup",
+               "orientation" : "horizontal",
+               "color" : "50,200,0"
+            }
+         ]
+      },
+      {
+         "text" : "【任务设置】",
+         "type" : "Page",
+         "views" : [
+            {
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "30",
+               "text" : "【游戏版本】",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "id" : "区组选择",
+               "list" : "公测区,内测区",
+               "select" : "0",
+               "size" : "15",
+               "type" : "RadioGroup",
+               "orientation" : "horizontal",
+               "color" : "0,0,0"
+            },
+            {
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "30",
                "text" : "【任务参数设置】",
                "bg" : "255,255,255",
                "type" : "Label"
@@ -113,20 +185,52 @@
             {
                "align" : "center",
                "color" : "0,0,0",
-               "size" : "30",
-               "text" : "【开始日常任务时间:XX:XX(英文标点)】",
+               "size" : "20",
+               "text" : "【开始日常任务时间】",
                "bg" : "255,255,255",
                "type" : "Label"
             },
             {
-               "id" : "任务开始时间",
-               "align" : "left",
-               "color" : "0,0,0",
-               "kbtype" : "number",
-               "prompt" : "输入格式:05:05",
-               "size" : "10",
-               "text" : "05:05",
-               "type" : "Edit"
+               "id" : "group1",
+               "width" : 550,
+               "height" : 150,
+               "type" : "LinearLayout",
+               "views" : [
+                  {
+                     "id" : "任务开始时间-小时",
+                     "list" : "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23",
+                     "select" : "5",
+                     "size" : "15",
+                     "type" : "ComboBox",
+                     "width" : 150
+                  },
+                  {
+                     "align" : "left",
+                     "color" : "0,0,0",
+                     "size" : "20",
+                     "text" : "点",
+                     "bg" : "255,255,255",
+                     "type" : "Label",
+                     "width" : 50
+                  },
+                  {
+                     "id" : "任务开始时间-分",
+                     "list" : "01,15,30,45",
+                     "select" : "0",
+                     "size" : "15",
+                     "type" : "ComboBox",
+                     "width" : 200
+                  },
+                  {
+                     "align" : "left",
+                     "color" : "0,0,0",
+                     "size" : "20",
+                     "text" : "分",
+                     "bg" : "255,255,255",
+                     "type" : "Label",
+                     "width" : 50
+                  }
+               ]
             },
             {
                "align" : "center",
@@ -145,9 +249,9 @@
                "orientation" : "horizontal",
                "color" : "200,0,200"
             },
-						{
+            {
                "id" : "居所清扫",
-							"list" : "随机清扫世界居所,不需要清扫世界居所",
+               "list" : "随机清扫世界居所,不需要清扫世界居所",
                "select" : "0",
                "size" : "15",
                "type" : "RadioGroup",
@@ -162,41 +266,6 @@
                "type" : "RadioGroup",
                "orientation" : "horizontal",
                "color" : "0,200,200"
-            },
-            {
-               "align" : "center",
-               "color" : "0,0,0",
-               "size" : "15",
-               "text" : "【储备补充】",
-               "bg" : "255,255,255",
-               "type" : "Label"
-            },
-            {
-               "id" : "血池补充",
-               "list" : "不需要血池,血池,中级血池,高级血池",
-               "select" : "0",
-               "size" : "15",
-               "type" : "RadioGroup",
-               "orientation" : "horizontal",
-               "color" : "0,0,0"
-            },
-            {
-               "id" : "灵池补充",
-               "list" : "不需要灵池,灵池,中级灵池,高级灵池",
-               "select" : "0",
-               "size" : "15",
-               "type" : "RadioGroup",
-               "orientation" : "horizontal",
-               "color" : "0,0,0"
-            },
-            {
-               "id" : "忠诚补充",
-               "list" : "不购买驯兽诀,购买驯兽诀",
-               "select" : "0",
-               "size" : "15",
-               "type" : "RadioGroup",
-               "orientation" : "horizontal",
-               "color" : "0,0,0"
             },
             {
                "id" : "line",
@@ -284,14 +353,32 @@
                "color" : "50,50,225"
             },
             {
-               "id" : "混队刷道次数",
-               "align" : "center",
-               "color" : "0,0,0",
-               "kbtype" : "number",
-               "prompt" : "在这里填写混队刷道次数，默认100",
-               "size" : "15",
-               "text" : "",
-               "type" : "Edit"
+               "id" : "group1",
+               "width" : 500,
+               "height" : 90,
+               "type" : "LinearLayout",
+               "views" : [
+                  {
+                     "align" : "left",
+                     "color" : "0,0,0",
+                     "size" : "20",
+                     "text" : "混队刷道次数:",
+                     "bg" : "255,255,255",
+                     "type" : "Label",
+                     "width" : 140
+                  },
+                  {
+                     "id" : "混队刷道次数",
+                     "align" : "center",
+                     "color" : "0,0,0",
+                     "kbtype" : "number",
+                     "prompt" : "在这里填写混队刷道次数，默认100",
+                     "size" : "15",
+                     "text" : "",
+                     "type" : "Edit",
+                     "width" : 200
+                  }
+               ]
             },
             {
                "align" : "center",
@@ -365,26 +452,62 @@
          ]
       },
       {
-         "text" : "【反馈】",
+         "text" : "【参数设置】",
          "type" : "Page",
          "views" : [
             {
                "align" : "center",
                "color" : "0,0,0",
-               "size" : "20",
-               "text" : "填上你的邮箱,脚本执行完成后就能收到邮件提醒",
+               "size" : "15",
+               "text" : "在下方填入除暴修行自定义喊话内容:",
                "bg" : "255,255,255",
                "type" : "Label"
             },
-						{
-	            "id" : "Edit1",
-	            "align" : "left",
-	            "color" : "0,0,0",
-	            "kbtype" : "string",
-	            "prompt" : "填上邮箱地址",
-	            "size" : "15",
-	            "text" : "",
-	            "type" : "Edit"
+            {
+               "id" : "除暴修炼喊话内容",
+               "align" : "left",
+               "color" : "0,0,0",
+               "kbtype" : "number",
+               "prompt" : "",
+               "size" : "15",
+               "text" : " 2040#R满次#R#G稳定#G的来咯~#51",
+               "type" : "Edit"
+            },
+            {
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "15",
+               "text" : "在下方填上混队刷道站街判定时间:(秒)",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "id" : "刷道站街判定时间",
+               "align" : "left",
+               "color" : "0,0,0",
+               "kbtype" : "number",
+               "prompt" : "",
+               "size" : "15",
+               "text" : "6",
+               "type" : "Edit"
+            },
+            {
+               "align" : "center",
+               "color" : "0,0,0",
+               "size" : "15",
+               "text" : "在下方填上你的邮箱,脚本执行完成后就能收到邮件提醒",
+               "bg" : "255,255,255",
+               "type" : "Label"
+            },
+            {
+               "id" : "用户邮箱",
+               "align" : "left",
+               "color" : "0,0,0",
+               "kbtype" : "string",
+               "prompt" : "填上邮箱地址",
+               "size" : "15",
+               "text" : "",
+               "type" : "Edit"
             }
          ]
       }

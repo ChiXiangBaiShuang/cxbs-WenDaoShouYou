@@ -10,6 +10,7 @@ function toZhuJieMian() --返回到游戏主界面
 		sleep(100)
 		while checkInterface(interfaceDatas) == "战斗" do
 			sleep(500)
+			ziDongZhanDou()
 		end
 		
 		if checkInterface(interfaceDatas) == "对话" then
@@ -49,6 +50,14 @@ function toZhuJieMian() --返回到游戏主界面
 			if x > -1 then
 				tap(x, y)
 			end
+			
+			x, y = findColor({794, 9, 842, 52},
+				"0|0|0xffd79d,-6|-6|0xffe7be,4|-5|0xffe5ba,5|5|0xfec87f,-6|6|0xfec67a,-3|-2|0xffdda8,5|7|0xfec476",
+				95, 0, 0, 0)
+			if x > -1 then
+				tap(x, y)   --图片浏览关闭按钮
+			end
+			
 			keepScreen(false)
 		end
 	end
@@ -282,15 +291,15 @@ function Dialog(dhkxx)
 	show({detail="选择对话框:"..dhkxx})
 	if GameVersion=="公测" then--公测
 		if dhkxx == 1 then
-			tap(682,302)
+			tap(677, 333)
 		end
 		
 		if dhkxx == 2 then
-			tap(682,352)
+			tap(677, 382)
 		end
 		
 		if dhkxx == 3 then
-			tap(683,399)
+			tap(677, 429)
 		end
 	end
 	if	GameVersion=="内测" then
@@ -326,7 +335,7 @@ function HideTask()
 			x,
 			y =
 			findColor(
-				{109, 34, 319, 462}, 
+				{109, 34, 319, 462},
 				"0|0|0xc9dfc9,-6|0|0xc9dfc9,-14|-23|0xacccb0,-1|-24|0xcae0cf,-5|19|0xc8dec4,-7|27|0xc4baad,-22|3|0xc4baad,-3|-32|0xc3b9ab",
 				95,
 				0,
@@ -343,7 +352,7 @@ function HideTask()
 				x,
 				y =
 				findColor(
-					{101, 25, 314, 463}, 
+					{101, 25, 314, 463},
 					"0|0|0xdfd2c1,6|1|0xdfd2c0,-6|-22|0xb3a894,-5|-22|0xb3a994,11|-32|0xc2b7a8,-13|-2|0xc4baad,-1|27|0xc4baad",
 					95,
 					0,
@@ -460,7 +469,7 @@ function buChongChuBei(yaoPin)  --yaoPin 1-高级血池  2-高级灵池  3-驯�
 	sleep(500)
 	if yaoPin==3 then
 		tap(683,340)--前往杂货店
-	else	
+	else
 		tap(574,340)--前往药店
 	end
 	while true do
@@ -468,11 +477,18 @@ function buChongChuBei(yaoPin)  --yaoPin 1-高级血池  2-高级灵池  3-驯�
 		if checkInterface(interfaceDatas)=="商店" then
 			if yaoPin==1 then
 				tap(163,160) --点击高级血池
-			else
-				if yaoPin==2 then
-					tap(371,235)
-				end
+				sleep(500)--
+				--tap(163,160) --高级血池数量+1
 			end
+			if yaoPin==2 then
+				tap(371,235)
+				sleep(500)
+				tap(371,235) --高级法池数量+1
+			end
+			if yaoPin==3 then
+				tap(226,101)  --驯兽诀数量+1
+			end
+			
 			sleep(500)
 			tap(642,425)--点击购买
 			buChongChuBei(yaoPin+1)
@@ -490,123 +506,9 @@ function buChongChuBei(yaoPin)  --yaoPin 1-高级血池  2-高级灵池  3-驯�
 			sleep(500)
 			if yaoPin==3 then
 				tap(683,340)--前往杂货店
-			else	
+			else
 				tap(574,340)--前往药店
 			end
-		end
-	end
-end
-
-function yaoPinGouMai()
-	if XUECHI==0 and LINGCHI==0 and ZHONGCHENG==0 then return end
-	show({detail="补充储备"})
-	gouMaiYaoPin=false
-	gouMaiXunShouJue=false
-	local xuechi={"","0|0|0xcb3434,-10|25|0x851717,5|28|0x9e1b1b","0|0|0xeb0404,-19|7|0x4b7ea4,-3|17|0x88c8e2,11|4|0xa90808","0|0|0xf5e246,-5|-13|0xcb3434,-22|4|0xb78b12,-15|13|0xb98e13,3|18|0xa27c10"}
-	local lingchi={"","0|0|0x0a01e3,0|-11|0xcbc8f9,-14|11|0x1f1b83","0|0|0x1b10f1,-14|9|0x6ca2c3,16|6|0x1913a3,0|21|0xb0e9f8","0|0|0xf3dd45,2|-11|0xcbc7f9,-22|3|0xb7850f,-1|8|0xd5b526"}
-	xunshoujue={"","0|0|0x463623,-3|21|0xb06b28,9|6|0x4a2119,32|14|0xd9d5c7,20|28|0xcf8a7a,18|16|0xded7c9"}
-	shopping={xuechi[XUECHI+1],lingchi[LINGCHI+1]}
-	if shopping[1]=="" and shopping[2]=="" then
-		
-	else
-		toZhuJieMian()
-		tap(764,31)--打开角色面板
-		sleep(500)
-		tap(664,387)--点击补充储备
-		sleep(200)
-		tap(574,340)--前往药店
-		while checkInterface(interfaceDatas)~="对话" do
-			sleep(100)
-			if isZhanJie(1) then
-				toZhuJieMian()
-				tap(764,31)--打开角色面板
-				sleep(500)
-				tap(664,387)--点击补充储备
-				sleep(200)
-				tap(574,340)--前往药店
-			end
-		end
-		while true do
-			sleep(50)
-			local interface=checkInterface(interfaceDatas)
-			if interface=="对话" then
-				Dialog(1)
-			end
-			
-			if interface=="商店" then
-				sleep(100)
-				for i=1,2 do
-					if shopping[i]~="" then
-						sysLog("shopping"..i)
-						x, y = findColor({125, 53, 541, 445}, 
-							shopping[i],
-							95, 0, 0, 0)
-						if x > -1 then
-							sysLog("shopping"..i)
-							tap(x,y)
-							sleep(50)
-							tap(633,303)--点击数量
-							sleep(100)
-							tap(575,91)--点击1
-							sleep(50)
-							tap(705,231)--点击确定
-							sleep(50)
-							tap(642,425)--点击购买
-							sleep(200)
-						end
-						sleep(100)
-					end
-				end
-				toZhuJieMian()
-				break
-			end
-		end
-	end
-	
-	
-	if ZHONGCHENG==0 then return end
-	if xunshoujue[ZHONGCHENG+1]~="" then
-		sysLog("购买驯兽诀")
-		toZhuJieMian()
-		sleep(1000)
-		tap(764,31)--打开角色面板
-		sleep(500)
-		tap(664,387)--点击补充储备
-		sleep(200)
-		tap(683,340)--前往杂货店
-		while checkInterface(interfaceDatas)~="对话" do
-			sleep(100)
-			if isZhanJie(1) then
-				toZhuJieMian()
-				tap(764,31)--打开角色面板
-				sleep(500)
-				tap(664,387)--点击补充储备
-				sleep(200)
-				tap(683,340)--前往杂货店
-			end
-		end
-	end
-	
-	while true do
-		sleep(50)
-		local interface=checkInterface(interfaceDatas)
-		if interface=="对话" then
-			Dialog(1)
-		end
-		if interface=="商店" then
-			sleep(500)
-			tap(166,94)
-			sleep(100)
-			tap(643,303)--点击数量
-			sleep(100)
-			tap(575,91)--点击1
-			sleep(100)
-			tap(705,245)--点击确定
-			sleep(100)
-			tap(642,425)--点击购买
-			sleep(100)
-			toZhuJieMian()
-			return
 		end
 	end
 end

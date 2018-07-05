@@ -19,11 +19,7 @@ function chuBaoXiuLian(type_XIULIAN)
 	cunQian()
 	---------------------------------
 	riZhiJiLu("除暴修炼：开始喊话组队~")
-	if type_XIULIAN == "修行" then
-		zuDui(" 2040#R满次#G稳定的来咯~#51")
-	else
-		zuDui(" 2010#R满次#G稳定的来咯~#51")
-	end
+	zuDui(wordCHUBAOXIULIAN)
 	riZhiJiLu("除暴修炼：队伍组建完成")
 	-----------领取除暴任务-----------
 	riZhiJiLu("除暴修炼：开始除暴任务~")
@@ -40,7 +36,7 @@ function chuBaoXiuLian(type_XIULIAN)
 			closeWuGuanPage()
 		end
 		
-		if isZhanJie(1) then
+		if isZhanJie(2) then
 			renWuChaZhao(data_CHUBAORENWU)
 			sleep(500)
 			if checkInterface(interfaceDatas) == "任务已完成" then
@@ -90,7 +86,7 @@ function chuBaoXiuLian(type_XIULIAN)
 		sleep(1000)
 		ziDongZhanDou()
 		
-		if isZhanJie(1) then
+		if isZhanJie(2) then
 			if type_XIULIAN == "修行" then
 				renWuChaZhao(data_XIUXING)
 			else --十绝阵

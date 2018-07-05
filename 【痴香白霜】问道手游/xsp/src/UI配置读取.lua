@@ -16,6 +16,7 @@ require("邮件发送")
 require("日志记录")
 require("新春任务-年货商人")
 require("居所清扫")
+require("切换技能")
 --[[
 变量说明
 SHUADAOToNewTask   刷道直到开始日常任务时间
@@ -25,32 +26,36 @@ SHUADAOToNewTask = false
 function UIset()
 	chioseTask = Global_result["任务选择"]
 	count_SHUADAO = tonumber(Global_result["混队刷道次数"])
-	user=Global_result["用户邮箱"]
+	ScriptUser=Global_result["用户邮箱"]
 	newTaskTime={}
 	newTaskTime.hour=tonumber(Global_result["任务开始时间-小时"])
 	ALL_newTaskTime_min={1,15,30,45}
 	newTaskTime.min=tonumber(ALL_newTaskTime_min[tonumber(Global_result["任务开始时间-分"]+1)])
 	
 	if count_SHUADAO == nil then
-		count_SHUADAO = 100
+		count_SHUADAO = 400
 	end
 	
 	ALL_quickChoice = {"痴香白霜0o0", "天涯の小仙", "天涯の小晓", "自定义"}
 	quickChoice = ALL_quickChoice[tonumber(Global_result["快捷选择"]) + 1]
 	riZhiJiLu("快捷选择:"..quickChoice)
 	
-	XUECHI=tonumber(Global_result["血池补充"])
-	sysLog(XUECHI.."血池")
-	LINGCHI=tonumber(Global_result["灵池补充"])
-	sysLog(LINGCHI.."灵池")
-	ZHONGCHENG=tonumber(Global_result["忠诚补充"])
-	
 	ALL_GameVersion={"公测","内测"}
 	GameVersion=ALL_GameVersion[tonumber(Global_result["区组选择"])+1]
 	
 	JUSUOQINGSAO=tonumber(Global_result["居所清扫"])
 	
-	sysLog(GameVersion)
+	wordCHUBAOXIULIAN=Global_result["除暴修炼喊话内容"]
+	
+	timeSHUADAOZhanJie=tonumber(Global_result["刷道站街判定时间"])
+	
+	RICHANGskillKind=tonumber(Global_result["日常技能类型"])+1
+	RICHANGskillNum =tonumber(Global_result["日常技能阶数"])+1
+	
+	SHUADAOskillKind=tonumber(Global_result["刷道技能类型"])+1
+	SHUADAOskillNum=tonumber(Global_result["刷道技能阶数"])+1
+	
+	
 	ALL_reward_ZHURENWEILE = {"经验", "道行", "潜能"}
 	reward_ZHURENWEILE = ALL_reward_ZHURENWEILE[tonumber(Global_result["助人为乐奖励类型"]) + 1]
 	
@@ -66,15 +71,13 @@ function UIset()
 	ALL_type_SHUADAO = {"降妖", "伏魔", "飞仙渡邪"}
 	type_SHUADAO = ALL_type_SHUADAO[tonumber(Global_result["刷道任务类型"]) + 1]
 	
-	ALL_doubleReward_SHUADAO = {true, false} --开双刷道选择
-	isDoubleReward_SHUADAO = ALL_doubleReward_SHUADAO[tonumber(Global_result["is双倍"]) + 1]
 	
+	QUANJUSHUANGBEI=tonumber(Global_result["全局双倍"])
 	chioseMode = tonumber(Global_result["模式选择"])
 	
 	isSwitchEquipment = tonumber(Global_result["装备切换"])
 	
 	isWorldSpeak_cleanHouse = tonumber(Global_result["世界喊话居所清扫"])
-	
 	isReceiveReward_SHUADAO = tonumber(Global_result["刷道积分奖励领取"])
 	
 	All_times_XIUFARENWU = {true, false}
@@ -113,6 +116,11 @@ function UIset()
 		ZHONGCHENG=1
 		JUSUOQINGSAO=0
 		TONGTIANTAprogress="挑战层"
+		RICHANGskillKind=4
+		RICHANGskillNum =3
+		SHUADAOskillKind=4
+		SHUADAOskillNum=4
+		
 	end
 	
 	if quickChoice == "天涯の小仙" then
@@ -122,7 +130,7 @@ function UIset()
 		isReceiveWelfare = true
 		type_XIULIAN = "修行"
 		isDoubleReward_SHUADAO = false
-		isSwitchEquipment = 0
+		isSwitchEquipment = 1
 		type_SHUADAO = "伏魔"
 		isWorldSpeak_cleanHouse = 0
 		isReceiveReward_SHUADAO = 0
@@ -159,7 +167,7 @@ function UIset()
 	
 	if chioseMode == 2 then
 		wuXueLiLian() --武学历练
-		lua_exit()
+		return
 	end
 	
 	if chioseMode == 0 then --SHUADAOToNewTask执行任务
@@ -180,6 +188,8 @@ function zhiXingRenWu() ---执行任务函数
 		tap(516, 300) --点击确认
 		sleep(500)
 	end
+	
+	changeSkill(RICHANGskillKind,RICHANGskillNum)
 	
 	if JUSUOQINGSAO==0 then
 		juSuoQingSao()

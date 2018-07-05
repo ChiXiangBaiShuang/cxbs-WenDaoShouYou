@@ -34,7 +34,7 @@ function jingJiChang()
 			sleep(1000)
 			if checkInterface(interfaceDatas) ~= "竞技场" then
 				riZhiJiLu("进入竞技场战斗~")
-				tap(498, 288)
+				--tap(498, 288)
 				sleep(1000)
 			else
 				renWuChaZhao(data_JINGJICHANG)

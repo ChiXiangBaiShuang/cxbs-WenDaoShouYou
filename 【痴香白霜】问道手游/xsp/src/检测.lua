@@ -123,6 +123,14 @@ function _checkInterface(interfaceDatas)
 		if x > -1 then
 			tap(x, y)
 		end
+		
+		x, y = findColor({277, 198, 366, 280}, 
+			"0|0|0xd1cec8,2|-6|0x037d92,-17|-1|0xd9cebd,3|-19|0xddd2c1,12|-2|0xd7cbb8,-4|17|0xb4aca1,-1|-26|0x36e1e0,-5|-17|0xebebe8",
+			95, 0, 0, 0)   --锁屏解锁
+		if x > -1 then
+			slip(x,y,x+250,y)
+		end
+		
 		keepScreen(false)
 	end
 	return Global_interface

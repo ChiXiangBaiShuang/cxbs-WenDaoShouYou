@@ -12,6 +12,9 @@ doubleTimes_now = false
 finishedCount_SHUADAO = 0
 isHideTask = true
 function shuaDaoJiFenJiangLi() --刷道积分领取，参数为检测刷道积分奖励轮次间隔
+	
+	if isReceiveReward_SHUADAO==1 then return end
+	
 	show({detail="刷道积分奖励领取"})
 	sleep(500)
 	tap(8, 65) --打开战斗中扩展面板
@@ -67,6 +70,9 @@ function shuaDaoJiFenJiangLi() --刷道积分领取，参数为检测刷道积�
 end
 
 function shiJieHanHuaQingSao(sjhhqs_count) --世界喊话打扫居所，参数为喊话轮次间隔
+	
+	if isWorldSpeak_cleanHouse==1 then sysLog("世界喊话居所清扫功能已关闭") return end
+	
 	show({detail="世界喊话居所清扫"})
 	sleep(200)
 	tap(75, 366) --打开社交界面
@@ -77,11 +83,7 @@ function shiJieHanHuaQingSao(sjhhqs_count) --世界喊话打扫居所，参数�
 	sleep(500)
 	slip(188, 332, 42, 332)
 	sleep(500)
-	if GameVersion=="公测" then
-		tap(43, 244) --点击输入居所链接
-	else
-		tap(120,247)---内测
-	end
+	tap(120,247)  --点击居所
 	sleep(100)
 	tap(394, 354) --点击表情
 	sleep(100)
@@ -91,6 +93,68 @@ function shiJieHanHuaQingSao(sjhhqs_count) --世界喊话打扫居所，参数�
 	sleep(500)
 	tap(396, 232) --关闭社交界面
 end
+
+function QuanJuShuangBei()
+	sdnow = getNowTime()
+	sysLog("当前时间:"..nowtime.hour..":"..nowtime.min)
+	if doubleTimesInQUANJU_SHUADAO == true and sdnow.hour * 60 + sdnow.min - 1 > 1230 then --全局双倍结束关闭双倍
+		riZhiJiLu("全局双倍时间结束,自动关闭双倍~")
+		sleep(200)
+		tap(8, 65) --打开战斗中扩展面板
+		sleep(500)
+		tap(134, 178) --打开巡逻
+		sleep(2000)
+		x,
+		y =
+		findColor(
+			{14, 5, 842, 472},
+			"0|0|0xc48b3a,231|-1|0xc48b3a,-70|47|0x62b376,-46|47|0xd5cec1,408|50|0xb28a50,-85|-282|0xb28a50",
+			95,
+			0,
+			0,
+			0
+		)
+		if x > -1 then
+			tap(252, 432) --关闭双倍
+		end
+		sleep(500)
+		tap(729, 27) --关闭巡逻界面
+		sleep(500)
+		tap(231, 61) --关闭战斗拓展面板
+		doubleTimesInQUANJU_SHUADAO = false
+		return
+	end
+	--全局双倍时间开启/关闭双倍刷道
+	if doubleTimesInQUANJU_SHUADAO == false and (sdnow.hour * 60 + sdnow.min - 1 < 1230 and sdnow.hour * 60 + sdnow.min > 1110)	then
+		--全局双倍时间自动开双
+		riZhiJiLu("全局双倍时间自动开双~")
+		doubleTimesInQUANJU_SHUADAO = true
+		sleep(200)
+		tap(8, 65) --打开战斗中扩展面板
+		sleep(500)
+		tap(134, 178) --打开巡逻
+		sleep(2000)
+		x,
+		y =
+		findColor(
+			{14, 5, 842, 472},
+			"0|0|0xc48b3a,231|-1|0xc48b3a,-70|47|0x62b376,-46|47|0xd5cec1,408|50|0xb28a50,-85|-282|0xb28a50",
+			95,
+			0,
+			0,
+			0
+		)
+		if x == -1 then
+			tap(252, 432) --打开双倍
+		end
+		sleep(500)
+		tap(729, 27) --关闭巡逻界面
+		sleep(500)
+		tap(231, 61) --关闭战斗拓展面板
+		return
+	end
+end
+
 
 function isTimeToNewTask(newTaskTime)
 	if newTaskFinished==true then return false end
@@ -124,7 +188,6 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 	if count_SHUADAO < 1 then --如果刷道次数小于1,任务完成
 		return true
 	end
-	toast("混队刷道到"..newTaskTime.hour.."点"..newTaskTime.min.."分开始日常任务")
 	while isInTeam() == true do
 		tap(176, 432) --离开队伍
 		sleep(600)
@@ -176,7 +239,7 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 		x, y = findColor({671, 72, 852, 249}, "0|0|0xcbac7a,-61|105|0xa5d8cf,2|117|0x98d0c4,-98|63|0xf7e6c5", 95, 0, 0, 0)
 		keepScreen(false)
 		if x == -1 and checkInterface(interfaceDatas) == "主界面" then
-			if isZhanJie(6) then
+			if isZhanJie(timeSHUADAOZhanJie) then
 				riZhiJiLu("刷道：被请离队伍/队伍解散了/无法进入队长线路")
 				return false
 			end
@@ -192,44 +255,50 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 		
 		if shuaDao_JieMian == "战斗中~" then
 			-----识别当前战斗是否为刷道------
-			sleep(500)
-			tap(10, 60) --打开战斗中扩展面板
-			sleep(1000)
-			tap(189, 123) --打开任务界面
-			sleep(1000)
-			tap(194, 76) --选中第一个任务
-			sleep(1000)
-			x,
-			y =
-			findColor(
-				{322, 219, 735, 403},
-				"0|0|0x8b5d43,7|7|0xf6f7f9,0|7|0x8f846f,11|2|0x8b5d43,10|16|0xdbae4e,6|-4|0x821f1d",
-				90,
-				0,
-				0,
-				0
-			)
-			sleep(500)
-			tap(729, 27) --关闭任务界面
-			sleep(500)
-			tap(231, 61) --关闭战斗拓展面板
-			if x == -1 then --检测刷道积分图标
-				show({task = type_SHUADAO .. " 非刷道战斗" })
+			if checkSHUADAO==true then
 				sleep(500)
 				tap(10, 60) --打开战斗中扩展面板
+				sleep(1000)
+				tap(189, 123) --打开任务界面
+				sleep(1000)
+				tap(194, 76) --选中第一个任务
+				sleep(1000)
+				x,
+				y =
+				findColor(
+					{322, 219, 735, 403},
+					"0|0|0x8b5d43,7|7|0xf6f7f9,0|7|0x8f846f,11|2|0x8b5d43,10|16|0xdbae4e,6|-4|0x821f1d",
+					90,
+					0,
+					0,
+					0
+				)
 				sleep(500)
-				tap(32, 179) --打开队伍面板
+				tap(729, 27) --关闭任务界面
 				sleep(500)
-				tap(176, 432) --离开队伍
-				sleep(600)
-				tap(498, 288) --点击确认
-				toZhuJieMian()
-				return false
+				tap(231, 61) --关闭战斗拓展面板
+				if x == -1 then --检测刷道积分图标
+					show({task = type_SHUADAO .. " 非刷道战斗" })
+					sleep(500)
+					tap(10, 60) --打开战斗中扩展面板
+					sleep(500)
+					tap(32, 179) --打开队伍面板
+					sleep(500)
+					tap(176, 432) --离开队伍
+					sleep(600)
+					tap(498, 288) --点击确认
+					toZhuJieMian()
+					return false
+				end
 			end
 			finishedCount_SHUADAO = finishedCount_SHUADAO + 1 --刷道轮次计数
 			shuadao_flag = 0
 			show({task = type_SHUADAO .. " 第" .. finishedCount_SHUADAO .. "/" .. count_SHUADAO .. "轮"})
-			--------------------------------
+			
+			
+			
+			-----------------刷道过程的特殊操作-----------------------
+			---------------------------------------------------------
 			if finishedCount_SHUADAO % 5 == 0 then
 				shiJieHanHuaQingSao() --进行世界喊话清扫居所一次
 			else
@@ -237,95 +306,15 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 					shuaDaoJiFenJiangLi() --检测一次刷道积分奖励
 				end
 			end
+			--全局双倍时间自动开双
 			
-			
-			sysLog("刷道开双:"..tostring(isDoubleReward_SHUADAO))
-			if isDoubleReward_SHUADAO == true then
-				if doubleTimes_now == false then
-					doubleTimes_now = true
-					sleep(200)
-					tap(8, 65) --打开战斗中扩展面板
-					sleep(500)
-					tap(134, 178) --打开巡逻
-					sleep(2000)
-					x,
-					y =
-					findColor(
-						{14, 5, 842, 472},
-						"0|0|0xc48b3a,231|-1|0xc48b3a,-70|47|0x62b376,-46|47|0xd5cec1,408|50|0xb28a50,-85|-282|0xb28a50",
-						95,
-						0,
-						0,
-						0
-					)
-					if x == -1 then
-						tap(252, 432) --打开双倍
-					end
-					sleep(500)
-					tap(729, 27) --关闭巡逻界面
-					sleep(500)
-					tap(231, 61) --关闭战斗拓展面板
-				end
-			else
-				--不在全局双倍时间关闭双倍
-				sdnow = getNowTime()
-				sysLog("当前时间:"..nowtime.hour..":"..nowtime.min)
-				if doubleTimesInQUANJU_SHUADAO == false and (sdnow.hour * 60 + sdnow.min - 1 < 1230 and sdnow.hour * 60 + sdnow.min > 1110)	then--全局双倍时间自动开双
-					riZhiJiLu("doubleTimes_SHUADAO时间自动开双~")
-					doubleTimesInQUANJU_SHUADAO = true
-					sleep(200)
-					tap(8, 65) --打开战斗中扩展面板
-					sleep(500)
-					tap(134, 178) --打开巡逻
-					sleep(2000)
-					x,
-					y =
-					findColor(
-						{14, 5, 842, 472},
-						"0|0|0xc48b3a,231|-1|0xc48b3a,-70|47|0x62b376,-46|47|0xd5cec1,408|50|0xb28a50,-85|-282|0xb28a50",
-						95,
-						0,
-						0,
-						0
-					)
-					if x == -1 then
-						tap(252, 432) --打开双倍
-					end
-					sleep(500)
-					tap(729, 27) --关闭巡逻界面
-					sleep(500)
-					tap(231, 61) --关闭战斗拓展面板
-				end
-				--全局双倍时间自动开双
-				
-				if doubleTimesInQUANJU_SHUADAO == true and sdnow.hour * 60 + sdnow.min - 1 > 1230 then --全局双倍结束关闭双倍
-					riZhiJiLu("全局双倍时间结束,自动关闭双倍~")
-					doubleTimes_SHUADAO = false
-					sleep(200)
-					tap(8, 65) --打开战斗中扩展面板
-					sleep(500)
-					tap(134, 178) --打开巡逻
-					sleep(2000)
-					x,
-					y =
-					findColor(
-						{14, 5, 842, 472},
-						"0|0|0xc48b3a,231|-1|0xc48b3a,-70|47|0x62b376,-46|47|0xd5cec1,408|50|0xb28a50,-85|-282|0xb28a50",
-						95,
-						0,
-						0,
-						0
-					)
-					if x > -1 then
-						tap(252, 432) --关闭双倍
-					end
-					sleep(500)
-					tap(729, 27) --关闭巡逻界面
-					sleep(500)
-					tap(231, 61) --关闭战斗拓展面板
-				end
+			if QUANJUSHUANGBEI==0 then  --全局双倍时间开/关双倍
+				QuanJuShuangBei()
 			end
-			--开启/关闭双倍刷道			
+			----------------------------------------------------------
+			----------------------------------------------------------
+			
+			
 			
 			if finishedCount_SHUADAO == count_SHUADAO then ---完成刷道
 				sleep(500)
@@ -342,6 +331,7 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 					tap(176, 432) --离开队伍
 					sleep(600)
 					tap(498, 288) --点击确认
+					toZhuJieMian()
 				end
 				return true
 			end
@@ -353,7 +343,7 @@ function _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) --@type_SHUADAO 刷道类�
 			toZhuJieMian()
 		end
 		
-		if isZhanJie(6) then
+		if isZhanJie(timeSHUADAOZhanJie) then
 			return false
 		end
 	end
@@ -361,6 +351,7 @@ end
 
 function HunDuiShuaDao(type_SHUADAO, count_SHUADAO)
 	currentTask="刷道"
+	changeSkill(SHUADAOskillKind,SHUADAOskillNum)
 	zhuangBeiQieHuan(isSwitchEquipment)
 	while true do
 		if _HunDuiShuaDao(type_SHUADAO, count_SHUADAO) == true then
@@ -371,7 +362,6 @@ function HunDuiShuaDao(type_SHUADAO, count_SHUADAO)
 	end
 	zhuangBeiFuYuan(isSwitchEquipment)
 	doubleTimesInQUANJU_SHUADAO=false
-	doubleTimes_SHUADAO = false
 	doubleTimes_now = false
 	isHideTask = true
 	currentTask=" "
